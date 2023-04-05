@@ -1,0 +1,1 @@
+# patent-idea-generator
