@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
 import openai
+import os
 
 # Initialize Flask app
 app = Flask(__name__)
 
 # Initialize OpenAI API key
-openai.api_key = "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"
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 # Define function to extract keywords from input text using OpenAI's API
