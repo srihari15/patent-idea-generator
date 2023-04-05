@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Initialize OpenAI API key
-openai.api_key = os.environ['OPENAI_API_KEY']
+openai_key = os.environ.get('OPENAI_API_KEY')
 
 
 # Define function to extract keywords from input text using OpenAI's API
