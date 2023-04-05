@@ -1,1 +1,1 @@
-web: gunicorn patent:app
+web: gunicorn app:app
