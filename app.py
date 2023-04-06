@@ -1,15 +1,39 @@
 from flask import Flask, render_template, request
 import openai
 import os
+import json
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, KeywordsOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 # Initialize Flask app
 app = Flask(__name__)
 
 # Initialize OpenAI API key
 openai_key = os.environ.get('OPENAI_API_KEY')
+nlu_key = os.environ.get('NLU_API_KEY')
+
+# Set up the authentication
+authenticator = IAMAuthenticator(nlu_key)
+natural_language_understanding = NaturalLanguageUnderstandingV1(
+    version='2018-03-16',
+    authenticator=authenticator
+)
+natural_language_understanding.set_service_url(
+    'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/237a815b-7be7-44db-a73d-1feaef411889')
 
 
-# Define function to extract keywords from input text using OpenAI's API
+# Define the function to get keywords
+def get_keywords(text):
+    response = natural_language_understanding.analyze(
+        text=text,
+        features=Features(keywords=KeywordsOptions(sentiment=False, emotion=False))
+    ).get_result()
+    keywords = [keyword['text'] for keyword in response['keywords']]
+    return keywords
+
+
+'''# Define function to extract keywords from input text using OpenAI's API
 def get_keywords(text):
     response = openai.Completion.create(
         engine="text-davinci-002",
@@ -20,7 +44,7 @@ def get_keywords(text):
         temperature=0.5,
     )
     keywords = response.choices[0].text.split("\n")
-    return [keyword.strip() for keyword in keywords if keyword.strip()]
+    return [keyword.strip() for keyword in keywords if keyword.strip()]'''
 
 
 # Define function to generate new patent idea and brief description using OpenAI GPT-3.5 API
