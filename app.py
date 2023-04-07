@@ -23,17 +23,17 @@ natural_language_understanding.set_service_url(
     'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/237a815b-7be7-44db-a73d-1feaef411889')
 
 
-# Define the function to get keywords
+'''# Define the function to get keywords
 def get_keywords(text):
     response = natural_language_understanding.analyze(
         text=text,
         features=Features(keywords=KeywordsOptions(sentiment=False, emotion=False))
     ).get_result()
     keywords = [keyword['text'] for keyword in response['keywords']]
-    return keywords
+    return keywords'''
 
 
-'''# Define function to extract keywords from input text using OpenAI's API
+# Define function to extract keywords from input text using OpenAI's API
 def get_keywords(text):
     response = openai.Completion.create(
         engine="text-davinci-002",
@@ -44,7 +44,7 @@ def get_keywords(text):
         temperature=0.5,
     )
     keywords = response.choices[0].text.split("\n")
-    return [keyword.strip() for keyword in keywords if keyword.strip()]'''
+    return [keyword.strip() for keyword in keywords if keyword.strip()]
 
 
 # Define function to generate new patent idea and brief description using OpenAI GPT-3.5 API
